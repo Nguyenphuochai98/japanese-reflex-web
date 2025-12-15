@@ -13,7 +13,7 @@
     }
 
     #kana {
-      font-size: 80px;
+      font-size: 90px;
       margin: 30px 0;
     }
 
@@ -25,6 +25,22 @@
     fieldset {
       display: inline-block;
       text-align: left;
+      padding: 10px 20px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 8px 16px;
+      font-size: 14px;
+    }
+
+    input {
+      width: 60px;
+      text-align: center;
+    }
+
+    #controls {
+      margin-top: 15px;
     }
 
     /* MIC TEST */
@@ -34,12 +50,7 @@
       left: 10px;
       border: 1px solid #ccc;
       padding: 10px;
-      font-size: 14px;
-    }
-
-    button {
-      margin: 5px;
-      padding: 6px 12px;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -65,22 +76,30 @@
   <br><br>
 
   <label>
+    Hiển thị (giây):
+    <input type="number" id="showTime" value="1" min="0.3" step="0.1">
+  </label>
+
+  &nbsp;&nbsp;
+
+  <label>
     Thời gian nói (giây):
-    <input type="number" id="time" value="3" min="1" max="5">
+    <input type="number" id="speakTime" value="3" min="1" max="6">
   </label>
 
   <br><br>
 
   <button onclick="start()">▶ BẮT ĐẦU</button>
+  <button onclick="resetSession()">🔄 Reset session</button>
 
   <hr>
 
-  <div id="kana"></div>
+  <div id="kana">—</div>
   <div id="result"></div>
 
   <div id="controls" style="display:none;">
     <button onclick="playUserVoice()">🔊 Nghe lại giọng tôi</button>
-    <button onclick="playCorrect()">📢 Nghe phát âm đúng</button>
+    <button onclick="playCorrect()">📢 Phát âm đúng</button>
     <button onclick="start()">▶ Tiếp tục</button>
   </div>
 

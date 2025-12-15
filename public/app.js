@@ -1,6 +1,13 @@
 let letters;
+let sessionPool = [];
+let currentItem = null;
+
 let currentAnswer = "";
 let currentAnswerKana = "";
+let recognizedText = "";
+
+let recorder;
+let chunks = [];
 let userAudioUrl = null;
 
 /* ================= LOAD DATA ================= */
@@ -8,25 +15,20 @@ fetch("/api/letters")
   .then(res => res.json())
   .then(data => letters = data);
 
-/* ================= SPEECH ================= */
+/* ================= SPEECH RECOGNITION ================= */
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = SpeechRecognition ? new SpeechRecognition() : null;
 
-let recognizedText = "";
-
 if (recognition) {
   recognition.lang = "ja-JP";
+  recognition.continuous = false;
   recognition.onresult = e => {
     recognizedText = e.results[0][0].transcript
       .toLowerCase()
       .replace(/\s/g, "");
   };
 }
-
-/* ================= RECORD ================= */
-let recorder;
-let chunks = [];
 
 /* ================= MIC TEST ================= */
 let testAudioUrl = null;
@@ -51,41 +53,72 @@ function playMicTest() {
   if (testAudioUrl) new Audio(testAudioUrl).play();
 }
 
-/* ================= MAIN ================= */
+/* ================= SESSION ================= */
+function resetSession() {
+  sessionPool = [];
+
+  if (hiragana.checked) sessionPool.push(...letters.hiragana);
+  if (katakana.checked) sessionPool.push(...letters.katakana);
+  if (combo.checked) sessionPool.push(...letters.combo);
+
+  sessionPool.sort(() => Math.random() - 0.5);
+
+  result.innerText = "🔄 Đã reset session";
+}
+
+/* ================= START ================= */
 function start() {
+  if (!letters) {
+    alert("Chưa load xong dữ liệu chữ!");
+    return;
+  }
+
+  if (sessionPool.length === 0) {
+    result.innerText = "🎉 Đã học hết chữ! Hãy Reset session.";
+    kana.innerText = "✓";
+    return;
+  }
+
   controls.style.display = "none";
   recognizedText = "";
   chunks = [];
 
-  const pool = [];
-  if (hiragana.checked) pool.push(...letters.hiragana);
-  if (katakana.checked) pool.push(...letters.katakana);
-  if (combo.checked) pool.push(...letters.combo);
+  currentItem = sessionPool.shift();
+  currentAnswer = currentItem.romaji;
+  currentAnswerKana = currentItem.kana;
 
-  const item = pool[Math.floor(Math.random() * pool.length)];
-  currentAnswer = item.romaji;
-  currentAnswerKana = item.kana;
-  kana.innerText = item.kana;
+  kana.innerText = currentAnswerKana;
   result.innerText = "";
 
-  setTimeout(() => countdown(Number(time.value)), 1000);
+  startRound(
+    Number(showTime.value),
+    Number(speakTime.value)
+  );
 }
 
-/* ================= COUNTDOWN ================= */
-async function countdown(seconds) {
+/* ================= CORE ROUND ================= */
+async function startRound(showSec, speakSec) {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   recorder = new MediaRecorder(stream);
 
   recorder.ondataavailable = e => chunks.push(e.data);
   recorder.start();
+
   if (recognition) recognition.start();
 
-  let count = seconds;
-  const timer = setInterval(() => {
-    kana.innerText = `HÃY NÓI (${count})`;
-    count--;
+  // ẨN KANA SAU showSec
+  setTimeout(() => {
+    kana.innerText = "❓";
+  }, showSec * 1000);
 
-    if (count < 0) {
+  let count = speakSec;
+  result.innerText = `🎙️ Hãy nói (${count}s)`;
+
+  const timer = setInterval(() => {
+    count--;
+    result.innerText = `🎙️ Hãy nói (${count}s)`;
+
+    if (count <= 0) {
       clearInterval(timer);
       finish();
     }
