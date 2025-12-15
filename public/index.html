@@ -18,17 +18,18 @@
     }
 
     h1 {
-      margin: 10px 0;
+      margin: 10px 0 5px;
     }
 
     #kana {
-      font-size: 100px;
-      margin: 30px 0;
+      font-size: 96px;
+      margin: 24px 0;
     }
 
     #result {
       font-size: 18px;
-      min-height: 24px;
+      min-height: 26px;
+      margin-bottom: 10px;
     }
 
     fieldset {
@@ -53,13 +54,8 @@
     button {
       padding: 10px 14px;
       font-size: 16px;
-      margin: 6px;
+      margin: 5px;
       cursor: pointer;
-    }
-
-    #controls button {
-      width: 100%;
-      margin-top: 8px;
     }
 
     /* ===== MIC TEST ===== */
@@ -71,11 +67,12 @@
       padding: 8px;
       font-size: 13px;
       background: #fff;
-      z-index: 999;
+      z-index: 1000;
     }
 
-    /* ===== BOTTOM BAR ===== */
-    .bottom-bar {
+    /* ===== CONTROLS BOTTOM (KẾT QUẢ) ===== */
+    .controls-bottom {
+      display: none;
       position: fixed;
       bottom: 0;
       left: 0;
@@ -83,28 +80,52 @@
       background: #ffffff;
       border-top: 1px solid #ddd;
       padding: 10px;
-      z-index: 998;
+      z-index: 999;
     }
 
+    .controls-bottom button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      margin: 6px 0;
+    }
+
+    /* chừa chỗ cho controls */
     body {
-      padding-bottom: 130px;
+      padding-bottom: 200px;
     }
 
-    /* ===== MOBILE OPTIMIZE ===== */
+    /* ===== MOBILE ===== */
     @media (max-width: 768px) {
       #kana {
-        font-size: 32vw;   /* 🔥 cực to */
-        margin: 12vh 0;
+        font-size: 32vw;       /* cực to */
+        margin: 10vh 0;
       }
 
       button {
-        width: 100%;
         font-size: 18px;
       }
 
       fieldset {
         width: 100%;
-        font-size: 16px;
+      }
+    }
+
+    /* ===== DESKTOP ===== */
+    @media (min-width: 769px) {
+      .controls-bottom {
+        position: static;
+        border-top: none;
+        padding: 0;
+      }
+
+      .controls-bottom button {
+        width: auto;
+        margin: 5px;
+      }
+
+      body {
+        padding-bottom: 0;
       }
     }
   </style>
@@ -121,6 +142,7 @@
 
   <h1>反射日本語トレーニング</h1>
 
+  <!-- SETUP -->
   <fieldset>
     <legend>Bảng chữ</legend>
     <label><input type="checkbox" id="hiragana" checked> Hiragana</label>
@@ -140,19 +162,22 @@
     <input type="number" id="speakTime" value="3" min="1" max="6">
   </label>
 
+  <br>
+
+  <button onclick="start()">▶ BẮT ĐẦU</button>
+  <button onclick="resetSession()">🔄 Reset session</button>
+
+  <hr>
+
+  <!-- MAIN -->
   <div id="kana">—</div>
   <div id="result"></div>
 
-  <div id="controls" style="display:none;">
+  <!-- CONTROLS (BOTTOM) -->
+  <div id="controls" class="controls-bottom">
     <button onclick="playUserVoice()">🔊 Nghe giọng tôi</button>
     <button onclick="playCorrect()">📢 Phát âm đúng</button>
     <button onclick="start()">▶ Tiếp</button>
-  </div>
-
-  <!-- BOTTOM BAR -->
-  <div class="bottom-bar">
-    <button onclick="start()">▶ BẮT ĐẦU</button>
-    <button onclick="resetSession()">🔄 Reset session</button>
   </div>
 
   <script src="app.js"></script>
