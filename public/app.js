@@ -15,7 +15,7 @@ fetch("/api/letters")
   .then(res => res.json())
   .then(data => letters = data);
 
-/* ================= SPEECH RECOGNITION ================= */
+/* ================= SPEECH ================= */
 const SpeechRecognition =
   window.SpeechRecognition || window.webkitSpeechRecognition;
 const recognition = SpeechRecognition ? new SpeechRecognition() : null;
@@ -45,7 +45,7 @@ async function startMicTest() {
 
   recorder.onstop = () => {
     testAudioUrl = URL.createObjectURL(new Blob(chunks));
-    alert("✔ Đã thu xong, bấm Nghe lại");
+    alert("✔ Mic OK");
   };
 }
 
@@ -63,18 +63,15 @@ function resetSession() {
 
   sessionPool.sort(() => Math.random() - 0.5);
 
-  result.innerText = "🔄 Đã reset session";
+  result.innerText = "🔄 Session mới";
 }
 
 /* ================= START ================= */
 function start() {
-  if (!letters) {
-    alert("Chưa load xong dữ liệu chữ!");
-    return;
-  }
+  if (!letters) return alert("Chưa load xong chữ!");
 
   if (sessionPool.length === 0) {
-    result.innerText = "🎉 Đã học hết chữ! Hãy Reset session.";
+    result.innerText = "🎉 Học xong! Reset để học lại.";
     kana.innerText = "✓";
     return;
   }
@@ -96,7 +93,7 @@ function start() {
   );
 }
 
-/* ================= CORE ROUND ================= */
+/* ================= CORE ================= */
 async function startRound(showSec, speakSec) {
   const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
   recorder = new MediaRecorder(stream);
@@ -106,17 +103,16 @@ async function startRound(showSec, speakSec) {
 
   if (recognition) recognition.start();
 
-  // ẨN KANA SAU showSec
   setTimeout(() => {
     kana.innerText = "❓";
   }, showSec * 1000);
 
   let count = speakSec;
-  result.innerText = `🎙️ Hãy nói (${count}s)`;
+  result.innerText = `🎙️ Nói (${count}s)`;
 
   const timer = setInterval(() => {
     count--;
-    result.innerText = `🎙️ Hãy nói (${count}s)`;
+    result.innerText = `🎙️ Nói (${count}s)`;
 
     if (count <= 0) {
       clearInterval(timer);
@@ -134,17 +130,17 @@ function finish() {
     userAudioUrl = URL.createObjectURL(new Blob(chunks));
 
     if (recognizedText.includes(currentAnswer)) {
-      result.innerText = `✅ ĐÚNG | Bạn nói: ${recognizedText}`;
+      result.innerText = `✅ ĐÚNG | ${recognizedText}`;
     } else {
       result.innerText =
-        `❌ SAI | Bạn nói: ${recognizedText || "Không nhận"} | Đúng: ${currentAnswer}`;
+        `❌ SAI | ${recognizedText || "Không nhận"} | Đúng: ${currentAnswer}`;
     }
 
     controls.style.display = "block";
   };
 }
 
-/* ================= PLAYBACK ================= */
+/* ================= PLAY ================= */
 function playUserVoice() {
   if (userAudioUrl) new Audio(userAudioUrl).play();
 }

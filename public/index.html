@@ -6,51 +6,106 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
+      margin: 0;
       font-family: Arial, sans-serif;
       text-align: center;
-      padding: 20px;
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 10px 0;
     }
 
     #kana {
-      font-size: 90px;
+      font-size: 100px;
       margin: 30px 0;
     }
 
     #result {
       font-size: 18px;
-      margin-top: 15px;
+      min-height: 24px;
     }
 
     fieldset {
       display: inline-block;
       text-align: left;
-      padding: 10px 20px;
+      padding: 10px 16px;
+      margin-bottom: 10px;
     }
 
-    button {
-      margin: 5px;
-      padding: 8px 16px;
-      font-size: 14px;
+    label {
+      display: block;
+      margin: 6px 0;
     }
 
     input {
-      width: 60px;
+      font-size: 16px;
+      padding: 4px;
+      width: 70px;
       text-align: center;
     }
 
-    #controls {
-      margin-top: 15px;
+    button {
+      padding: 10px 14px;
+      font-size: 16px;
+      margin: 6px;
+      cursor: pointer;
     }
 
-    /* MIC TEST */
+    #controls button {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    /* ===== MIC TEST ===== */
     #mic-test {
       position: fixed;
       top: 10px;
       left: 10px;
       border: 1px solid #ccc;
-      padding: 10px;
+      padding: 8px;
       font-size: 13px;
+      background: #fff;
+      z-index: 999;
+    }
+
+    /* ===== BOTTOM BAR ===== */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #ffffff;
+      border-top: 1px solid #ddd;
+      padding: 10px;
+      z-index: 998;
+    }
+
+    body {
+      padding-bottom: 130px;
+    }
+
+    /* ===== MOBILE OPTIMIZE ===== */
+    @media (max-width: 768px) {
+      #kana {
+        font-size: 32vw;   /* 🔥 cực to */
+        margin: 12vh 0;
+      }
+
+      button {
+        width: 100%;
+        font-size: 18px;
+      }
+
+      fieldset {
+        width: 100%;
+        font-size: 16px;
+      }
     }
   </style>
 </head>
@@ -59,48 +114,45 @@
 
   <!-- MIC TEST -->
   <div id="mic-test">
-    <strong>🎤 Test Mic</strong><br>
+    <strong>🎤 Mic</strong><br>
     <button onclick="startMicTest()">Nói</button>
-    <button onclick="playMicTest()">Nghe lại</button>
+    <button onclick="playMicTest()">Nghe</button>
   </div>
 
   <h1>反射日本語トレーニング</h1>
 
   <fieldset>
     <legend>Bảng chữ</legend>
-    <label><input type="checkbox" id="hiragana" checked> Hiragana</label><br>
-    <label><input type="checkbox" id="katakana"> Katakana</label><br>
+    <label><input type="checkbox" id="hiragana" checked> Hiragana</label>
+    <label><input type="checkbox" id="katakana"> Katakana</label>
     <label><input type="checkbox" id="combo"> Chữ ghép</label>
   </fieldset>
 
-  <br><br>
+  <br>
 
   <label>
-    Hiển thị (giây):
+    Hiển thị (s):
     <input type="number" id="showTime" value="1" min="0.3" step="0.1">
   </label>
 
-  &nbsp;&nbsp;
-
   <label>
-    Thời gian nói (giây):
+    Nói (s):
     <input type="number" id="speakTime" value="3" min="1" max="6">
   </label>
-
-  <br><br>
-
-  <button onclick="start()">▶ BẮT ĐẦU</button>
-  <button onclick="resetSession()">🔄 Reset session</button>
-
-  <hr>
 
   <div id="kana">—</div>
   <div id="result"></div>
 
   <div id="controls" style="display:none;">
-    <button onclick="playUserVoice()">🔊 Nghe lại giọng tôi</button>
+    <button onclick="playUserVoice()">🔊 Nghe giọng tôi</button>
     <button onclick="playCorrect()">📢 Phát âm đúng</button>
-    <button onclick="start()">▶ Tiếp tục</button>
+    <button onclick="start()">▶ Tiếp</button>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="bottom-bar">
+    <button onclick="start()">▶ BẮT ĐẦU</button>
+    <button onclick="resetSession()">🔄 Reset session</button>
   </div>
 
   <script src="app.js"></script>
