@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Japanese Reflex Trainer</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+
+    #kana {
+      font-size: 80px;
+      margin: 30px 0;
+    }
+
+    #result {
+      font-size: 18px;
+      margin-top: 15px;
+    }
+
+    fieldset {
+      display: inline-block;
+      text-align: left;
+    }
+
+    /* MIC TEST */
+    #mic-test {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    button {
+      margin: 5px;
+      padding: 6px 12px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- MIC TEST -->
+  <div id="mic-test">
+    <strong>🎤 Test Mic</strong><br>
+    <button onclick="startMicTest()">Nói</button>
+    <button onclick="playMicTest()">Nghe lại</button>
+  </div>
+
+  <h1>反射日本語トレーニング</h1>
+
+  <fieldset>
+    <legend>Bảng chữ</legend>
+    <label><input type="checkbox" id="hiragana" checked> Hiragana</label><br>
+    <label><input type="checkbox" id="katakana"> Katakana</label><br>
+    <label><input type="checkbox" id="combo"> Chữ ghép</label>
+  </fieldset>
+
+  <br><br>
+
+  <label>
+    Thời gian nói (giây):
+    <input type="number" id="time" value="3" min="1" max="5">
+  </label>
+
+  <br><br>
+
+  <button onclick="start()">▶ BẮT ĐẦU</button>
+
+  <hr>
+
+  <div id="kana"></div>
+  <div id="result"></div>
+
+  <div id="controls" style="display:none;">
+    <button onclick="playUserVoice()">🔊 Nghe lại giọng tôi</button>
+    <button onclick="playCorrect()">📢 Nghe phát âm đúng</button>
+    <button onclick="start()">▶ Tiếp tục</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
