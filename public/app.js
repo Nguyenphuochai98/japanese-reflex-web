@@ -9,6 +9,7 @@ let recognizedText = "";
 let recorder;
 let chunks = [];
 let userAudioUrl = null;
+let micStream = null;
 
 /* ================= LOAD DATA ================= */
 fetch("/api/letters")
@@ -34,19 +35,24 @@ if (recognition) {
 let testAudioUrl = null;
 
 async function startMicTest() {
-  chunks = [];
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  recorder = new MediaRecorder(stream);
+  try {
+    chunks = [];
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recorder = new MediaRecorder(stream);
 
-  recorder.ondataavailable = e => chunks.push(e.data);
-  recorder.start();
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.start();
 
-  setTimeout(() => recorder.stop(), 3000);
+    setTimeout(() => recorder.stop(), 3000);
 
-  recorder.onstop = () => {
-    testAudioUrl = URL.createObjectURL(new Blob(chunks));
-    alert("✔ Mic OK");
-  };
+    recorder.onstop = () => {
+      stream.getTracks().forEach(track => track.stop());
+      testAudioUrl = URL.createObjectURL(new Blob(chunks));
+      alert("✔ Mic OK");
+    };
+  } catch (error) {
+    alert("⚠️ Không có quyền micro. Bài luyện vẫn chạy bình thường.");
+  }
 }
 
 function playMicTest() {
@@ -79,6 +85,7 @@ function start() {
   controls.style.display = "none";
   recognizedText = "";
   chunks = [];
+  userAudioUrl = null;
 
   currentItem = sessionPool.shift();
   currentAnswer = currentItem.romaji;
@@ -95,13 +102,24 @@ function start() {
 
 /* ================= CORE ================= */
 async function startRound(showSec, speakSec) {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  recorder = new MediaRecorder(stream);
+  micStream = null;
+  if (enableMic.checked) {
+    try {
+      micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (error) {
+      result.innerText = "⚠️ Không có quyền micro. Tiếp tục luyện không mic.";
+    }
+  }
 
-  recorder.ondataavailable = e => chunks.push(e.data);
-  recorder.start();
+  if (micStream) {
+    recorder = new MediaRecorder(micStream);
+    recorder.ondataavailable = e => chunks.push(e.data);
+    recorder.start();
 
-  if (recognition) recognition.start();
+    if (recognition) recognition.start();
+  } else {
+    recorder = null;
+  }
 
   setTimeout(() => {
     kana.innerText = "❓";
@@ -124,11 +142,8 @@ async function startRound(showSec, speakSec) {
 /* ================= FINISH ================= */
 function finish() {
   if (recognition) recognition.stop();
-  recorder.stop();
 
-  recorder.onstop = () => {
-    userAudioUrl = URL.createObjectURL(new Blob(chunks));
-
+  const showResult = () => {
     if (recognizedText.includes(currentAnswer)) {
       result.innerText = `✅ ĐÚNG | ${recognizedText}`;
     } else {
@@ -136,13 +151,28 @@ function finish() {
         `❌ SAI | ${recognizedText || "Không nhận"} | Đúng: ${currentAnswer}`;
     }
 
-    controls.style.display = "block";
+    controls.style.display = "flex";
   };
+
+  if (recorder) {
+    recorder.stop();
+    recorder.onstop = () => {
+      if (micStream) micStream.getTracks().forEach(track => track.stop());
+      userAudioUrl = URL.createObjectURL(new Blob(chunks));
+      showResult();
+    };
+  } else {
+    showResult();
+  }
 }
 
 /* ================= PLAY ================= */
 function playUserVoice() {
-  if (userAudioUrl) new Audio(userAudioUrl).play();
+  if (userAudioUrl) {
+    new Audio(userAudioUrl).play();
+  } else {
+    alert("Chưa có bản ghi để phát lại.");
+  }
 }
 
 function playCorrect() {
