@@ -12,172 +12,244 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 16px;
+      font-family: "Inter", "Segoe UI", Arial, sans-serif;
+      background: #f5f7fb;
+      color: #1f2a44;
+      padding: 24px;
     }
 
-    h1 {
-      margin: 10px 0 5px;
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .hero {
+      text-align: left;
+      padding: 24px 28px;
+      background: linear-gradient(135deg, #ffffff, #eef3ff);
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(30, 45, 90, 0.08);
+    }
+
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+    }
+
+    .hero p {
+      margin: 0;
+      color: #5b6785;
+    }
+
+    .panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 24px rgba(31, 42, 68, 0.08);
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      border: 1px solid #e5e9f4;
+      border-radius: 16px;
+      padding: 16px;
+      background: #fbfcff;
+    }
+
+    fieldset {
+      border: none;
+      padding: 0;
+      text-align: left;
+    }
+
+    fieldset legend {
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 8px 0;
+      font-size: 15px;
+    }
+
+    input[type="number"] {
+      font-size: 16px;
+      padding: 8px 10px;
+      width: 90px;
+      border-radius: 10px;
+      border: 1px solid #d6dceb;
+    }
+
+    input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+    }
+
+    button {
+      padding: 12px 18px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: none;
+      background: #2f6fed;
+      color: #fff;
+      font-weight: 600;
+      box-shadow: 0 8px 16px rgba(47, 111, 237, 0.25);
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(47, 111, 237, 0.3);
+    }
+
+    button.secondary {
+      background: #eef2ff;
+      color: #2f3b59;
+      box-shadow: none;
+      border: 1px solid #d7def0;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .practice {
+      text-align: center;
+      padding: 16px;
+      border-radius: 16px;
+      background: #f4f7ff;
+      border: 1px dashed #d6dff2;
     }
 
     #kana {
       font-size: 96px;
-      margin: 24px 0;
+      margin: 10px 0;
     }
 
     #result {
       font-size: 18px;
       min-height: 26px;
       margin-bottom: 10px;
+      color: #2f3b59;
     }
 
-    fieldset {
-      display: inline-block;
-      text-align: left;
-      padding: 10px 16px;
-      margin-bottom: 10px;
-    }
-
-    label {
-      display: block;
-      margin: 6px 0;
-    }
-
-    input {
-      font-size: 16px;
-      padding: 4px;
-      width: 70px;
-      text-align: center;
-    }
-
-    button {
-      padding: 10px 14px;
-      font-size: 16px;
-      margin: 5px;
-      cursor: pointer;
+    .hint {
+      font-size: 13px;
+      color: #6b768f;
+      margin-top: 6px;
     }
 
     /* ===== MIC TEST ===== */
     #mic-test {
-      position: fixed;
-      top: 10px;
-      left: 10px;
-      border: 1px solid #ccc;
-      padding: 8px;
-      font-size: 13px;
-      background: #fff;
-      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
 
     /* ===== CONTROLS BOTTOM (KẾT QUẢ) ===== */
     .controls-bottom {
       display: none;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #ffffff;
-      border-top: 1px solid #ddd;
-      padding: 10px;
-      z-index: 999;
+      gap: 12px;
+      flex-wrap: wrap;
     }
 
     .controls-bottom button {
-      width: 100%;
-      padding: 14px;
-      font-size: 18px;
-      margin: 6px 0;
-    }
-
-    /* chừa chỗ cho controls */
-    body {
-      padding-bottom: 200px;
+      width: auto;
     }
 
     /* ===== MOBILE ===== */
     @media (max-width: 768px) {
       #kana {
         font-size: 32vw;       /* cực to */
-        margin: 10vh 0;
+        margin: 6vh 0;
       }
 
       button {
         font-size: 18px;
       }
 
-      fieldset {
-        width: 100%;
-      }
-    }
-
-    /* ===== DESKTOP ===== */
-    @media (min-width: 769px) {
-      .controls-bottom {
-        position: static;
-        border-top: none;
-        padding: 0;
-      }
-
-      .controls-bottom button {
-        width: auto;
-        margin: 5px;
-      }
-
-      body {
-        padding-bottom: 0;
+      .actions {
+        flex-direction: column;
       }
     }
   </style>
 </head>
 
 <body>
+  <div class="page">
+    <header class="hero">
+      <h1>反射日本語トレーニング</h1>
+      <p>Rèn phản xạ Kana nhanh, gọn, chuyên nghiệp ngay trên trình duyệt.</p>
+    </header>
 
-  <!-- MIC TEST -->
-  <div id="mic-test">
-    <strong>🎤 Mic</strong><br>
-    <button onclick="startMicTest()">Nói</button>
-    <button onclick="playMicTest()">Nghe</button>
-  </div>
+    <section class="panel">
+      <div class="config-grid">
+        <div class="card">
+          <fieldset>
+            <legend>Bảng chữ</legend>
+            <label><input type="checkbox" id="hiragana" checked> Hiragana</label>
+            <label><input type="checkbox" id="katakana"> Katakana</label>
+            <label><input type="checkbox" id="combo"> Chữ ghép</label>
+          </fieldset>
+        </div>
 
-  <h1>反射日本語トレーニング</h1>
+        <div class="card">
+          <label>
+            Hiển thị (s):
+            <input type="number" id="showTime" value="1" min="0.3" step="0.1">
+          </label>
 
-  <!-- SETUP -->
-  <fieldset>
-    <legend>Bảng chữ</legend>
-    <label><input type="checkbox" id="hiragana" checked> Hiragana</label>
-    <label><input type="checkbox" id="katakana"> Katakana</label>
-    <label><input type="checkbox" id="combo"> Chữ ghép</label>
-  </fieldset>
+          <label>
+            Nói (s):
+            <input type="number" id="speakTime" value="3" min="1" max="6">
+          </label>
 
-  <br>
+          <label>
+            <input type="checkbox" id="enableMic" checked>
+            Dùng micro (tùy chọn)
+          </label>
+          <div class="hint">Nếu không bật micro, bài luyện vẫn chạy bình thường.</div>
+        </div>
 
-  <label>
-    Hiển thị (s):
-    <input type="number" id="showTime" value="1" min="0.3" step="0.1">
-  </label>
+        <div class="card" id="mic-test">
+          <strong>🎤 Kiểm tra mic</strong>
+          <button class="secondary" onclick="startMicTest()">Nói</button>
+          <button class="secondary" onclick="playMicTest()">Nghe lại</button>
+        </div>
+      </div>
 
-  <label>
-    Nói (s):
-    <input type="number" id="speakTime" value="3" min="1" max="6">
-  </label>
+      <div class="actions">
+        <button onclick="start()">▶ BẮT ĐẦU</button>
+        <button class="secondary" onclick="resetSession()">🔄 Reset session</button>
+      </div>
 
-  <br>
-
-  <button onclick="start()">▶ BẮT ĐẦU</button>
-  <button onclick="resetSession()">🔄 Reset session</button>
-
-  <hr>
-
-  <!-- MAIN -->
-  <div id="kana">—</div>
-  <div id="result"></div>
-
-  <!-- CONTROLS (BOTTOM) -->
-  <div id="controls" class="controls-bottom">
-    <button onclick="playUserVoice()">🔊 Nghe giọng tôi</button>
-    <button onclick="playCorrect()">📢 Phát âm đúng</button>
-    <button onclick="start()">▶ Tiếp</button>
+      <div class="practice">
+        <div id="kana">—</div>
+        <div id="result"></div>
+        <div id="controls" class="controls-bottom">
+          <button onclick="playUserVoice()">🔊 Nghe giọng tôi</button>
+          <button class="secondary" onclick="playCorrect()">📢 Phát âm đúng</button>
+          <button onclick="start()">▶ Tiếp</button>
+        </div>
+      </div>
+    </section>
   </div>
 
   <script src="app.js"></script>
